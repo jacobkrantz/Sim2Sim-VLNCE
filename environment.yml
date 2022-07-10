@@ -1,0 +1,19 @@
+name: sim2sim
+channels:
+  - aihabitat
+  - defaults
+  - anaconda
+dependencies:
+  - python=3.6
+  - caffe-gpu
+  - habitat-sim=0.1.7
+  - headless
+  - pip
+  - pip:
+    - -r habitat-lab/requirements.txt
+    - -r habitat-lab/habitat_baselines/rl/requirements.txt
+    - -r habitat-lab/habitat_baselines/rl/ddppo/requirements.txt
+    - -r habitat-lab/habitat_baselines/il/requirements.txt
+    - -r requirements.txt
+    - -e habitat-lab/
+    - -e transformers/

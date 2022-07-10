@@ -7,6 +7,17 @@ _C = get_config()
 _C.defrost()
 
 # ----------------------------------------------------------------------------
+# 2D LASER SCANNER SIMULATION
+# ----------------------------------------------------------------------------
+_C.TASK.LASER_2D = CN()
+_C.TASK.LASER_2D.ENABLED = False
+_C.TASK.LASER_2D.HEIGHT = 1
+_C.TASK.LASER_2D.WIDTH = 360  # 360 * 4 = 1440. Matches a hokuyo laser scanner
+_C.TASK.LASER_2D.SENSOR_HEIGHT = 0.24
+_C.TASK.LASER_2D.MAX_DEPTH = 4.8
+_C.TASK.LASER_2D.NORMALIZE_DEPTH = True
+_C.TASK.LASER_2D.POOL_MODE = "exact"  # options: min, max, mean, exact
+# ----------------------------------------------------------------------------
 # PANORAMA SETTINGS
 # ----------------------------------------------------------------------------
 _C.TASK.PANO_ROTATIONS = 12
@@ -23,12 +34,34 @@ _C.TASK.ORACLE_ACTION_SENSOR = CN()
 _C.TASK.ORACLE_ACTION_SENSOR.TYPE = "OracleActionSensor"
 _C.TASK.ORACLE_ACTION_SENSOR.GOAL_RADIUS = 0.5
 # ----------------------------------------------------------------------------
-# # RXR INSTRUCTION SENSOR
+# RXR INSTRUCTION SENSOR
 # ----------------------------------------------------------------------------
 _C.TASK.RXR_INSTRUCTION_SENSOR = CN()
 _C.TASK.RXR_INSTRUCTION_SENSOR.TYPE = "RxRInstructionSensor"
 _C.TASK.RXR_INSTRUCTION_SENSOR.features_path = "data/datasets/RxR_VLNCE_v0/text_features/rxr_{split}/{id:06}_{lang}_text_features.npz"
-_C.TASK.INSTRUCTION_SENSOR_UUID = "rxr_instruction"
+# ----------------------------------------------------------------------------
+# TOKENIZED VLN INSTRUCTION SENSOR
+# ----------------------------------------------------------------------------
+_C.TASK.VLN_INSTRUCTION_SENSOR = CN()
+_C.TASK.VLN_INSTRUCTION_SENSOR.TYPE = "VLNInstructionSensor"
+_C.TASK.VLN_INSTRUCTION_SENSOR.MODEL_OR_PATH = "bert-base-uncased"
+_C.TASK.VLN_INSTRUCTION_SENSOR.PADDED_LENGTH = 80
+# ----------------------------------------------------------------------------
+# VLN CANDIDATE SENSOR
+# ----------------------------------------------------------------------------
+_C.TASK.VLN_CANDIDATE_SENSOR = CN()
+_C.TASK.VLN_CANDIDATE_SENSOR.TYPE = "VLNCandidateSensor"
+_C.TASK.VLN_CANDIDATE_SENSOR.MAX_CANDIDATES = 36
+_C.TASK.VLN_CANDIDATE_SENSOR.GRAPHS_FILE = "data/connectivity_graphs.pkl"
+# ----------------------------------------------------------------------------
+# VLN CANDIDATE RELATIVE SENSOR
+# ----------------------------------------------------------------------------
+_C.TASK.VLN_CANDIDATE_RELATIVE_SENSOR = CN()
+_C.TASK.VLN_CANDIDATE_RELATIVE_SENSOR.TYPE = "VLNCandidateRelativeSensor"
+_C.TASK.VLN_CANDIDATE_RELATIVE_SENSOR.MAX_CANDIDATES = 36
+_C.TASK.VLN_CANDIDATE_RELATIVE_SENSOR.GRAPHS_FILE = (
+    "data/connectivity_graphs.pkl"
+)
 # ----------------------------------------------------------------------------
 # SHORTEST PATH SENSOR
 # ----------------------------------------------------------------------------
@@ -51,12 +84,25 @@ _C.TASK.PANO_ANGLE_FEATURE_SENSOR = CN()
 _C.TASK.PANO_ANGLE_FEATURE_SENSOR.TYPE = "AngleFeaturesSensor"
 _C.TASK.PANO_ANGLE_FEATURE_SENSOR.CAMERA_NUM = 12
 # ----------------------------------------------------------------------------
+# MP3D HEAD ANGLE FEATURE SENSOR
+# ----------------------------------------------------------------------------
+_C.TASK.MP3D_ACTION_ANGLE_SENSOR = CN()
+_C.TASK.MP3D_ACTION_ANGLE_SENSOR.TYPE = "MP3DActionAngleFeature"
+_C.TASK.MP3D_ACTION_ANGLE_SENSOR.FEATURE_SIZE = 128
+_C.TASK.MP3D_ACTION_ANGLE_SENSOR.SNAP_HEADINGS = True
+# ----------------------------------------------------------------------------
 # GO_TOWARD_POINT ACTION
 # ----------------------------------------------------------------------------
 _C.TASK.ACTIONS.GO_TOWARD_POINT = CN()
 _C.TASK.ACTIONS.GO_TOWARD_POINT.TYPE = "GoTowardPoint"
 # if True, update the heading to face away from where the agent came from
 _C.TASK.ACTIONS.GO_TOWARD_POINT.rotate_agent = True
+# ----------------------------------------------------------------------------
+# TELEPORT_AND_ROTATE ACTION
+# ----------------------------------------------------------------------------
+_C.TASK.ACTIONS.TELEPORT_AND_ROTATE = CN()
+_C.TASK.ACTIONS.TELEPORT_AND_ROTATE.TYPE = "TeleportAndRotateAction"
+_C.TASK.ACTIONS.TELEPORT_AND_ROTATE.SNAP_HEADING = True
 # ----------------------------------------------------------------------------
 # NDTW MEASUREMENT
 # ----------------------------------------------------------------------------

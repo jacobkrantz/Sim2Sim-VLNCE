@@ -1,0 +1,28 @@
+# Experiment config for running inference with a discrete VLN agent in VLN-CE.
+#     Subgoals: Subgoal Generation Module (SGM)
+#    VLN agent: Recurrent VLN-BERT w/ Habitat vision
+#   Navigation: Local Policy (LP)
+
+BASE_TASK_CONFIG_PATH: habitat_extensions/config/vln_harness_sgm_local_policy_task.yaml
+ENV_NAME: LPInferenceEnv
+SIMULATOR_GPU_IDS: [0]
+TORCH_GPU_ID: 0
+NUM_ENVIRONMENTS: 5
+LOCAL_POLICY: True
+
+INFERENCE:
+  SPLIT: val_unseen
+  CKPT_PATH: data/models/RecVLNBERT-ce_vision-tuned.pth
+  PREDICTIONS_FILE: val_unseen_predictions.json
+
+RL:
+  POLICY:
+    OBS_TRANSFORMS:
+      ENABLED_TRANSFORMS: [
+        ObsStack,
+        Laser2D,
+        RadialOccupancy,
+        ResNetAllEncoder,
+        SubgoalModule,
+        PreprocessVLNInstruction,
+      ]

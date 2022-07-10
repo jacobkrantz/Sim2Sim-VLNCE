@@ -1,0 +1,13 @@
+# train the VLN agent via imitation learning on optimal SGM paths.
+# must first collect these paths.
+
+BASE_TASK_CONFIG_PATH: habitat_extensions/config/vln_harness_sgm_local_policy_task.yaml
+CHECKPOINT_FOLDER: data/checkpoints/sgm_train_imitation
+TENSORBOARD_DIR: data/tensorboard_dirs/sgm_train_imitation
+
+IL:
+    ckpt_to_load: data/models/RecVLNBERT-ce_vision.pth
+    batch_size: 12
+    epochs: 70
+    lr: 1e-7
+    lmdb_features_dir: data/trajectory_dirs/sgm_imitation_paths/{split}

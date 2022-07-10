@@ -1,0 +1,17 @@
+# Experiment config for evaluating a discrete VLN agent in VLN-CE.
+#     Subgoals: known MP3D navigation graph
+#    VLN agent: Recurrent VLN-BERT w/ Habitat vision
+#   Navigation: Local Policy (LP)
+
+BASE_TASK_CONFIG_PATH: habitat_extensions/config/vln_harness_local_policy_task.yaml
+ENV_NAME: LPEnv
+SIMULATOR_GPU_IDS: [0]
+TORCH_GPU_ID: 0
+NUM_ENVIRONMENTS: 5
+EVAL_CKPT_PATH_DIR: data/models/RecVLNBERT-ce_vision.pth
+RESULTS_DIR:  data/results/RecVLNBERT-ce_vision/known_graph-local_policy
+LOCAL_POLICY: True
+
+EVAL:
+  SPLIT: val_unseen
+  SAVE_NAV_STATS: True

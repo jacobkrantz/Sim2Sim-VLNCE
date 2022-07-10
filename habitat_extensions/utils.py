@@ -1,3 +1,4 @@
+import math
 import textwrap
 from copy import deepcopy
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -711,6 +712,97 @@ def heading_from_quaternion(quat: quaternion.quaternion) -> float:
     )
     phi = cartesian_to_polar(-heading_vector[2], heading_vector[0])[1]
     return phi % (2 * np.pi)
+
+
+def mp3d_heading_from_habitat_quat(quat: np.quaternion) -> float:
+    """Generates an equivalent Matterport3D Simulator heading given a Habitat
+    rotation quaternion. Returns the heading in radians. Use this method in
+    favor of Euler angle extraction. You have been warned.
+    """
+    return -heading_from_quaternion(quat) % (2 * np.pi)
+
+
+def habitat_quat_from_mp3d_heading(mp3d_heading: float) -> np.quaternion:
+    """Generates a Habitat rotation quaternion from a heading from the
+    Matterport3D Simulator.
+    """
+    habitat_heading = -mp3d_heading % (2 * np.pi)
+    return quaternion.from_euler_angles([0.0, habitat_heading, 0.0])
+
+
+def snap_heading(heading, n: int = 12):
+    """Given a heading in radians on the interval [0, 2pi], return the nearest
+    heading amongst `n` equally-spaced headings.
+    """
+    if n < 1:
+        raise ValueError("`n` must be greater than zero.")
+
+    headingIncrement = np.pi * 2.0 / n
+    heading_step = int(np.around(heading / headingIncrement))
+    if heading_step == n:
+        heading_step = 0
+    return heading_step * headingIncrement
+
+
+def vln_style_angle_features(
+    heading: Union[float, Tensor],
+    elevation: Union[float, Tensor],
+    feature_size: int,
+    as_tensor: bool = True,
+    device: Optional[torch.device] = None,
+) -> Union[ndarray, Tensor]:
+    """Generate angle features defined as repeated sines and cosines of
+    heading and elevations.
+
+    Args:
+        heading (float | Tensor): horizontal planar heading in radians.
+        elevation (float | Tensor): look up / look down angle in radians.
+        feature size (int): desired dimensionality of the generated features.
+            Must be divisible by 4.
+        as_tensor (bool): if True, it returns a torch.tensor on the provided
+            device. Otherwise returns a numpy array.
+        device (torch.device): if the features are created from float values,
+            send them to this deviuce. Defaults to CPU.
+
+    Returns:
+        ndarray or Tensor
+    """
+    if feature_size % 4 != 0:
+        raise ValueError("feature_size must be divisible by 4.")
+    if device is None:
+        device = torch.device("cpu")
+
+    hT = isinstance(heading, Tensor)
+    eT = isinstance(elevation, Tensor)
+
+    if hT and eT:
+        # construct batched features via torch
+        dims = len(heading.shape)
+        features = torch.stack(
+            [
+                torch.sin(heading),
+                torch.cos(heading),
+                torch.sin(elevation),
+                torch.cos(elevation),
+            ],
+            dim=len(heading.shape),
+        )
+        if dims == 2:
+            return features.repeat(1, 1, feature_size // 4)
+        return features.repeat(1, feature_size // 4)
+
+    if hT or eT:
+        raise ValueError("mismatched instance types not supported.")
+
+    features = [
+        math.sin(heading),
+        math.cos(heading),
+        math.sin(elevation),
+        math.cos(elevation),
+    ] * (feature_size // 4)
+    if as_tensor:
+        return torch.tensor(features, device=device)
+    return np.array(features, dtype=np.float32)
 
 
 def predictions_to_global_coordinates(

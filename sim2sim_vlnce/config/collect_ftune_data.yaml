@@ -1,0 +1,25 @@
+# Runs the SGM on VLN-CE R2R episodes with an oracle subgoal selection policy.
+# Generates an imitation dataset for training VLN agents.
+
+BASE_TASK_CONFIG_PATH: habitat_extensions/config/vln_harness_sgm_local_policy_task.yaml
+ENV_NAME: SPFEnv
+SIMULATOR_GPU_IDS: [0]
+TORCH_GPU_ID: 0
+RESULTS_DIR: data/trajectory_dirs/sgm_imitation_paths
+
+EVAL:
+  SAVE_RESULTS: True
+  EPISODE_COUNT: -1
+  SPLIT: train
+
+RL:
+  POLICY:
+    OBS_TRANSFORMS:
+      ENABLED_TRANSFORMS: [
+        ObsStack,
+        Laser2D,
+        RadialOccupancy,
+        ResNetAllEncoder,
+        SubgoalModule,
+        PreprocessVLNInstruction,
+      ]
