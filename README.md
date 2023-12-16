@@ -39,10 +39,10 @@ python download_mp.py --task habitat -o data/scene_datasets/mp3d/
 
 `download_mp.py` must be obtained from the Matterport3D [project webpage](https://niessner.github.io/Matterport/).
 
-4. Download the Room-to-Room episodes in VLN-CE format ([link](https://drive.google.com/file/d/1qrdomxA5fuQ6n44NXzPAJe2dMdxatvma/view))
+4. Download the Room-to-Room episodes in VLN-CE format ([link](https://drive.google.com/file/d/1T9SjqZWyR2PCLSXYkFckfDeIs6Un0Rjm/view))
 
 ```bash
-gdown https://drive.google.com/uc?id=1qrdomxA5fuQ6n44NXzPAJe2dMdxatvma
+gdown https://drive.google.com/uc?id=1T9SjqZWyR2PCLSXYkFckfDeIs6Un0Rjm
 # Extract to: ./data/datasets/R2R_VLNCE_v1-3/{split}/{split}.json.gz
 ```
 
@@ -114,7 +114,7 @@ All experiment configs are set for a GPU with 32GB of RAM. For smaller cards, co
 
 Training Recurrent-VLN-BERT should be done in [that repository](https://github.com/YicongHong/Recurrent-VLN-BERT). Other panorama-based VLN agents could also be transferred with this Sim2Sim method but are not currently supported.
 
-To train with **3D reconstruction image features**, either download them from [here](https://drive.google.com/file/d/1gnp_H6PKCZdMc-OB_4MHfBDQ7OPPY4Ga/view?usp=sharing) (`habitat-ResNet-152-places365.tsv`) or generate them yourself:
+To train with **3D reconstruction image features**, either download them from [here](https://drive.google.com/file/d/1ah8S0fuVdh10ToK2n6MGm3KBy7KE-OFH/view?usp=sharing) (`habitat-ResNet-152-places365.tsv`) or generate them yourself:
 
 ```bash
 # ~4.5 hours on a 32GB Tesla V100 GPU.
@@ -155,7 +155,7 @@ We use the [vln-sim2real-envs](https://github.com/batra-mlp-lab/vln-sim2real-env
 
 ## Model Downloads
 
-VLN weights [[zip](https://drive.google.com/file/d/1AAmOzX8TKOv4q2QEI1a28-jhin_9HT2e/view?usp=sharing)]. Extracted format: `./data/models/{Model-Name}`
+VLN weights [[zip](https://drive.google.com/file/d/1drUx95xhGkwJgHaphCCmtSHUsL6lNNO4/view?usp=sharing)]. Extracted format: `./data/models/{Model-Name}`
 
 | VLN Model | Model Name | Descritption |
 |:--:|--|--|
@@ -164,7 +164,7 @@ VLN weights [[zip](https://drive.google.com/file/d/1AAmOzX8TKOv4q2QEI1a28-jhin_9
 | 3 | `RecVLNBERT-ce_vision.pth` | Trained with 3D reconstruction image features |
 | 4 | `RecVLNBERT-ce_vision-tuned.pth` | Fine-tunes row 3 in VLN-CE ([leaderboard](https://eval.ai/web/challenges/challenge-page/719) model) |
 
-SGM weights [[zip](https://drive.google.com/file/d/1vRdK07U1BIm1oXbT5oitU-KtocewmuRH/view?usp=sharing)]. Extracted format: `./data/sgm_models/{Model-Name}`
+SGM weights [[zip](https://drive.google.com/file/d/10LpvN0XCiKszoDB8AKCZVPfsI61H9yx9/view?usp=sharing)]. Extracted format: `./data/sgm_models/{Model-Name}`
 
 | SGM Model | Model Name | Descritption |
 |:--:|--|--|
